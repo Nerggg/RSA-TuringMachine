@@ -1,0 +1,108 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+struct Symbol {
+    char read;
+    char substitute;
+    Symbol() {};
+    Symbol(char read, char substitute) : read(read), substitute(substitute) {}
+};
+
+struct Rule {
+    string nextState;
+    bool direction; // true = kanan, false = kiri
+    Symbol symbol;
+    Rule() {};
+    Rule(string nextState, bool direction, Symbol symbol) : nextState(nextState), direction(direction), symbol(symbol) {}
+};
+
+struct State {
+    string name;
+    bool status; // true = final state, false = not final state
+    vector<Rule> rules;
+    State() {};
+    State(string name, bool status, vector<Rule> rules) : name(name), status(status), rules(rules) {}
+};
+
+struct TuringMachine {
+    string tape;
+    int readIdx;
+    string currentState;
+    TuringMachine(string tape, int readIdx, string currentState) : tape(tape), readIdx(readIdx), currentState(currentState) {}
+
+    void readTapeOneStep(unordered_map<string, State> map) {
+        for (int i = 0; i < map[currentState].rules.size(); i++) {
+            if (tape[readIdx] == map[currentState].rules[i].symbol.read) {
+                tape[readIdx] = map[currentState].rules[i].symbol.substitute;
+                if (map[currentState].rules[i].direction) {
+                    readIdx++;
+                }
+                else {
+                    readIdx--;
+                }
+                currentState = map[currentState].rules[i].nextState;
+                if (map[currentState].status) {
+                    cout << "accepted" << endl;
+                }
+                break;
+            }
+            if (i == map[currentState].rules.size() - 1) {
+                cout << "rejected" << endl;
+            }
+        }
+    }
+
+    void readTapeWhole(unordered_map<string, State> map) {
+        while (!map[currentState].status) {
+            bool passed = false;
+            for (int i = 0; i < map[currentState].rules.size(); i++) {
+                if (tape[readIdx] == map[currentState].rules[i].symbol.read) {
+                    tape[readIdx] = map[currentState].rules[i].symbol.substitute;
+                    if (map[currentState].rules[i].direction) {
+                        readIdx++;
+                    }
+                    else {
+                        readIdx--;
+                    }
+                    currentState = map[currentState].rules[i].nextState;
+                    passed = true;
+                    if (map[currentState].status) {
+                        cout << "accepted" << endl;
+                    }
+                    break;
+                }
+            }
+            if (!passed) {
+                cout << "rejected" << endl;
+                break;
+            }
+        }
+    }
+};
+
+int main() {
+    State q0("q0", false, {Rule("q1", true, Symbol('x', 'x')), Rule("q2", true, Symbol('B', 'B'))});
+    State q1("q1", false, {Rule("q0", true, Symbol('x', 'x'))});
+    State q2("q2", true, {});
+    unordered_map<string, State> map;
+    map["q0"] = q0;
+    map["q1"] = q1;
+    map["q2"] = q2;
+
+    TuringMachine tes("xxB", 0, "q0");
+
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+    // tes.readTapeOneStep(map);
+
+    tes.readTapeWhole(map);
+}

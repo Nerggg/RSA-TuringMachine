@@ -1,25 +1,24 @@
 #include <iostream>
-#include <iomanip>
-#include <sstream>
 #include <string>
-
-void convertStringToNumber(std::string& input) {
-    std::string result;
-    for (char c : input) {
-        // Mengambil nilai ASCII dari karakter
-        int ascii_value = static_cast<int>(c);
-        // Menggunakan stringstream untuk mengubah angka menjadi string 3 digit
-        std::ostringstream oss;
-        oss << std::setw(3) << std::setfill('0') << ascii_value;
-        // Menambahkan string 3 digit ke hasil
-        result += oss.str();
-    }
-    input = result;
-}
+#include <iomanip>  // Untuk std::setfill dan std::setw
 
 int main() {
-    std::string input = "ABC";
-    convertStringToNumber(input);
-    std::cout << "Converted string: " << input << std::endl;
+    std::string str = "ABC";
+    std::string result = str;
+
+    for (std::size_t i = 0; i < str.size(); ++i) {
+        // Convert character to its ASCII code and format it as a three-digit number
+        std::string ascii_code = std::to_string(static_cast<int>(str[i]));
+        while (ascii_code.length() < 3) {
+            ascii_code = "0" + ascii_code; // Pad with zeros to make it three digits
+        }
+
+        // Replace the character with its ASCII code
+        result.replace(i * 3, 1, ascii_code);
+
+        // Print the result for this iteration
+        std::cout << result << std::endl;
+    }
+
     return 0;
 }

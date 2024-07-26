@@ -81,7 +81,7 @@ struct TuringMachine {
 
     void readTapeOneStep(unordered_map<string, State> map) {
         for (int i = 0; i < map[currentState].rules.size(); i++) {
-        if (tape[readIdx] == map[currentState].rules[i].symbol.read[0] || map[currentState].rules[i].symbol.read == "allChar") {
+            if (tape[readIdx] == map[currentState].rules[i].symbol.read[0] || (map[currentState].rules[i].symbol.read == "allChar" && tape[readIdx] != '$')) {
 
                 // rsa functionality
                 if (currentState == "q0" && !eValue && tape[readIdx] != '_') {
@@ -104,7 +104,13 @@ struct TuringMachine {
                 }
 
                 if (currentState == "q3" && map[currentState].rules[i].symbol.substitute == "encrypt") {
-                    tape[readIdx] = encryptChar(eValue, nValue, tape[readIdx]);
+                    // tape[readIdx] = encryptChar(eValue, nValue, tape[readIdx]);
+                    string ascii = to_string(encryptChar(eValue, nValue, tape[readIdx]));
+                    while (ascii.length() < 3) {
+                        ascii = "0" + ascii;
+                    }
+                    tape.replace(readIdx, 1, ascii);
+                    readIdx += 2;
                 }
                 // end
 
@@ -134,7 +140,7 @@ struct TuringMachine {
         while (!map[currentState].status) {
             bool passed = false;
             for (int i = 0; i < map[currentState].rules.size(); i++) {
-                if (tape[readIdx] == map[currentState].rules[i].symbol.read[0] || map[currentState].rules[i].symbol.read == "allChar") {
+                if (tape[readIdx] == map[currentState].rules[i].symbol.read[0] || (map[currentState].rules[i].symbol.read == "allChar" && tape[readIdx] != '$')) {
 
                     // rsa functionality
                     if (currentState == "q0" && !eValue && tape[readIdx] != '_') {
@@ -157,7 +163,13 @@ struct TuringMachine {
                     }
 
                     if (currentState == "q3" && map[currentState].rules[i].symbol.substitute == "encrypt") {
-                        tape[readIdx] = encryptChar(eValue, nValue, tape[readIdx]);
+                        // tape[readIdx] = encryptChar(eValue, nValue, tape[readIdx]);
+                        string ascii = to_string(encryptChar(eValue, nValue, tape[readIdx]));
+                        while (ascii.length() < 3) {
+                            ascii = "0" + ascii;
+                        }
+                        tape.replace(readIdx, 1, ascii);
+                        readIdx += 2;
                     }
                     // end
 
@@ -183,9 +195,9 @@ struct TuringMachine {
                 cout << "rejected" << endl;
                 break;
             }
-            cout << "private key (d) " << dValue << endl;
-            cout << "public key (e) " << eValue << endl;
-            cout << "n " << nValue << endl;
+            // cout << "private key (d) " << dValue << endl;
+            // cout << "public key (e) " << eValue << endl;
+            // cout << "n " << nValue << endl;
         }
     }
 };
@@ -194,7 +206,7 @@ int main() {
     State q0("q0", false, {Rule("q0", true, Symbol("0", "0")), Rule("q0", true, Symbol("1", "1")), Rule("q0", true, Symbol("2", "2")), Rule("q0", true, Symbol("3", "3")), Rule("q0", true, Symbol("4", "4")), Rule("q0", true, Symbol("5", "5")), Rule("q0", true, Symbol("6", "6")), Rule("q0", true, Symbol("7", "7")), Rule("q0", true, Symbol("8", "8")), Rule("q0", true, Symbol("9", "9")), Rule("q1", true, Symbol("_", "_"))});
     State q1("q1", false, {Rule("q1", true, Symbol("0", "0")), Rule("q1", true, Symbol("1", "1")), Rule("q1", true, Symbol("2", "2")), Rule("q1", true, Symbol("3", "3")), Rule("q1", true, Symbol("4", "4")), Rule("q1", true, Symbol("5", "5")), Rule("q1", true, Symbol("6", "6")), Rule("q1", true, Symbol("7", "7")), Rule("q1", true, Symbol("8", "8")), Rule("q1", true, Symbol("9", "9")), Rule("q2", true, Symbol("_", "_"))});
     State q2("q2", false, {Rule("q2", true, Symbol("0", "0")), Rule("q2", true, Symbol("1", "1")), Rule("q2", true, Symbol("2", "2")), Rule("q2", true, Symbol("3", "3")), Rule("q2", true, Symbol("4", "4")), Rule("q2", true, Symbol("5", "5")), Rule("q2", true, Symbol("6", "6")), Rule("q2", true, Symbol("7", "7")), Rule("q2", true, Symbol("8", "8")), Rule("q2", true, Symbol("9", "9")), Rule("q3", true, Symbol("_", "_"))});
-    State q3("q3", false, {Rule("q3", true, Symbol("allChar", "encrypt"))});
+    State q3("q3", false, {Rule("q3", true, Symbol("allChar", "encrypt")), Rule("q4", true, Symbol("$", "$"))});
     State q4("q4", true, {});
     unordered_map<string, State> map;
     map["q0"] = q0;
@@ -203,8 +215,8 @@ int main() {
     map["q3"] = q3;
     map["q4"] = q4;
 
-    TuringMachine t("7_103_143_hello", 0, "q0");
-    // t.readTapeWhole(map);
+    TuringMachine t("7_103_143_hello$", 0, "q0");
+    t.readTapeWhole(map);
 
     // while (true) {
     //     t.readTapeOneStep(map);

@@ -18,11 +18,33 @@ string highlightCharacter(const string& input, int position) {
     return result;
 }
 
+cpp_int power(cpp_int base, cpp_int exponent) {
+    cpp_int result = 1;
+    while (exponent != 0) {
+        if (exponent % 2 == 1) {
+            result *= base;
+        }
+        base *= base;
+        exponent /= 2;
+    }
+    return result;
+}
+
+char encryptChar(int e, int n, char c) {
+    cpp_int temp = power(int(c), e);
+    return char(temp % n);
+}
+
+char decryptChar(int d, int n, char c) {
+    cpp_int temp = power(int(c), d);
+    return char(temp % n);
+}
+
 struct Symbol {
-    char read;
-    char substitute;
+    string read;
+    string substitute;
     Symbol() {};
-    Symbol(char read, char substitute) : read(read), substitute(substitute) {}
+    Symbol(string read, string substitute) : read(read), substitute(substitute) {}
 };
 
 struct Rule {
@@ -59,7 +81,7 @@ struct TuringMachine {
 
     void readTapeOneStep(unordered_map<string, State> map) {
         for (int i = 0; i < map[currentState].rules.size(); i++) {
-            if (tape[readIdx] == map[currentState].rules[i].symbol.read) {
+        if (tape[readIdx] == map[currentState].rules[i].symbol.read[0] || map[currentState].rules[i].symbol.read == "allChar") {
 
                 // rsa functionality
                 if (currentState == "q0" && !eValue && tape[readIdx] != '_') {
@@ -80,9 +102,16 @@ struct TuringMachine {
                 else if (currentState == "q2" && eValue && tape[readIdx] == '_') {
                     nValue = stoi(nValueTemp);
                 }
+
+                if (currentState == "q3" && map[currentState].rules[i].symbol.substitute == "encrypt") {
+                    tape[readIdx] = encryptChar(eValue, nValue, tape[readIdx]);
+                }
                 // end
 
-                tape[readIdx] = map[currentState].rules[i].symbol.substitute;
+                else {
+                    tape[readIdx] = map[currentState].rules[i].symbol.substitute[0];
+                }
+                cout << highlightCharacter(tape, readIdx) << endl;
                 if (map[currentState].rules[i].direction) {
                     readIdx++;
                 }
@@ -105,7 +134,7 @@ struct TuringMachine {
         while (!map[currentState].status) {
             bool passed = false;
             for (int i = 0; i < map[currentState].rules.size(); i++) {
-                if (tape[readIdx] == map[currentState].rules[i].symbol.read) {
+                if (tape[readIdx] == map[currentState].rules[i].symbol.read[0] || map[currentState].rules[i].symbol.read == "allChar") {
 
                     // rsa functionality
                     if (currentState == "q0" && !eValue && tape[readIdx] != '_') {
@@ -126,9 +155,15 @@ struct TuringMachine {
                     else if (currentState == "q2" && eValue && tape[readIdx] == '_') {
                         nValue = stoi(nValueTemp);
                     }
+
+                    if (currentState == "q3" && map[currentState].rules[i].symbol.substitute == "encrypt") {
+                        tape[readIdx] = encryptChar(eValue, nValue, tape[readIdx]);
+                    }
                     // end
 
-                    tape[readIdx] = map[currentState].rules[i].symbol.substitute;
+                    else {
+                        tape[readIdx] = map[currentState].rules[i].symbol.substitute[0];
+                    }
                     cout << highlightCharacter(tape, readIdx) << endl;
                     if (map[currentState].rules[i].direction) {
                         readIdx++;
@@ -155,33 +190,11 @@ struct TuringMachine {
     }
 };
 
-cpp_int power(cpp_int base, cpp_int exponent) {
-    cpp_int result = 1;
-    while (exponent != 0) {
-        if (exponent % 2 == 1) {
-            result *= base;
-        }
-        base *= base;
-        exponent /= 2;
-    }
-    return result;
-}
-
-char encryptChar(int e, int n, char c) {
-    cpp_int temp = power(int(c), e);
-    return char(temp % n);
-}
-
-char decryptChar(int d, int n, char c) {
-    cpp_int temp = power(int(c), d);
-    return char(temp % n);
-}
-
 int main() {
-    State q0("q0", false, {Rule("q0", true, Symbol('0', '0')), Rule("q0", true, Symbol('1', '1')), Rule("q0", true, Symbol('2', '2')), Rule("q0", true, Symbol('3', '3')), Rule("q0", true, Symbol('4', '4')), Rule("q0", true, Symbol('5', '5')), Rule("q0", true, Symbol('6', '6')), Rule("q0", true, Symbol('7', '7')), Rule("q0", true, Symbol('8', '8')), Rule("q0", true, Symbol('9', '9')), Rule("q1", true, Symbol('_', '_'))});
-    State q1("q1", false, {Rule("q1", true, Symbol('0', '0')), Rule("q1", true, Symbol('1', '1')), Rule("q1", true, Symbol('2', '2')), Rule("q1", true, Symbol('3', '3')), Rule("q1", true, Symbol('4', '4')), Rule("q1", true, Symbol('5', '5')), Rule("q1", true, Symbol('6', '6')), Rule("q1", true, Symbol('7', '7')), Rule("q1", true, Symbol('8', '8')), Rule("q1", true, Symbol('9', '9')), Rule("q2", true, Symbol('_', '_'))});
-    State q2("q2", false, {Rule("q2", true, Symbol('0', '0')), Rule("q2", true, Symbol('1', '1')), Rule("q2", true, Symbol('2', '2')), Rule("q2", true, Symbol('3', '3')), Rule("q2", true, Symbol('4', '4')), Rule("q2", true, Symbol('5', '5')), Rule("q2", true, Symbol('6', '6')), Rule("q2", true, Symbol('7', '7')), Rule("q2", true, Symbol('8', '8')), Rule("q2", true, Symbol('9', '9')), Rule("q3", true, Symbol('_', '_'))});
-    State q3("q3", false, {Rule("q3", true, Symbol('allChar', 'encrypt'))});
+    State q0("q0", false, {Rule("q0", true, Symbol("0", "0")), Rule("q0", true, Symbol("1", "1")), Rule("q0", true, Symbol("2", "2")), Rule("q0", true, Symbol("3", "3")), Rule("q0", true, Symbol("4", "4")), Rule("q0", true, Symbol("5", "5")), Rule("q0", true, Symbol("6", "6")), Rule("q0", true, Symbol("7", "7")), Rule("q0", true, Symbol("8", "8")), Rule("q0", true, Symbol("9", "9")), Rule("q1", true, Symbol("_", "_"))});
+    State q1("q1", false, {Rule("q1", true, Symbol("0", "0")), Rule("q1", true, Symbol("1", "1")), Rule("q1", true, Symbol("2", "2")), Rule("q1", true, Symbol("3", "3")), Rule("q1", true, Symbol("4", "4")), Rule("q1", true, Symbol("5", "5")), Rule("q1", true, Symbol("6", "6")), Rule("q1", true, Symbol("7", "7")), Rule("q1", true, Symbol("8", "8")), Rule("q1", true, Symbol("9", "9")), Rule("q2", true, Symbol("_", "_"))});
+    State q2("q2", false, {Rule("q2", true, Symbol("0", "0")), Rule("q2", true, Symbol("1", "1")), Rule("q2", true, Symbol("2", "2")), Rule("q2", true, Symbol("3", "3")), Rule("q2", true, Symbol("4", "4")), Rule("q2", true, Symbol("5", "5")), Rule("q2", true, Symbol("6", "6")), Rule("q2", true, Symbol("7", "7")), Rule("q2", true, Symbol("8", "8")), Rule("q2", true, Symbol("9", "9")), Rule("q3", true, Symbol("_", "_"))});
+    State q3("q3", false, {Rule("q3", true, Symbol("allChar", "encrypt"))});
     State q4("q4", true, {});
     unordered_map<string, State> map;
     map["q0"] = q0;
@@ -191,5 +204,10 @@ int main() {
     map["q4"] = q4;
 
     TuringMachine t("7_103_143_hello", 0, "q0");
-    t.readTapeWhole(map);
+    // t.readTapeWhole(map);
+
+    // while (true) {
+    //     t.readTapeOneStep(map);
+    //     cin.get();
+    // }
 }

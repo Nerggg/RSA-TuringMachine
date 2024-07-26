@@ -1,10 +1,25 @@
 #include <iostream>
-using namespace std;
+#include <iomanip>
+#include <sstream>
+#include <string>
 
-bool isNumber(char n) {
-    return n == '1' || n == '2' || n == '3' || n == '4' || n == '5' || n == '6' || n == '7' || n == '8' || n == '9' || n == '0';
+void convertStringToNumber(std::string& input) {
+    std::string result;
+    for (char c : input) {
+        // Mengambil nilai ASCII dari karakter
+        int ascii_value = static_cast<int>(c);
+        // Menggunakan stringstream untuk mengubah angka menjadi string 3 digit
+        std::ostringstream oss;
+        oss << std::setw(3) << std::setfill('0') << ascii_value;
+        // Menambahkan string 3 digit ke hasil
+        result += oss.str();
+    }
+    input = result;
 }
 
 int main() {
-    string tes1 = "123_456_rsawaw";
+    std::string input = "ABC";
+    convertStringToNumber(input);
+    std::cout << "Converted string: " << input << std::endl;
+    return 0;
 }

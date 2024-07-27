@@ -25,3 +25,11 @@
     // TuringMachine tes("0011B", 0, "q0");
 
     // tes.readTapeWhole(map);
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    string tes = "00123";
+    cout << stoi(tes) + 10 << endl;
+}

@@ -69,7 +69,7 @@ std::tuple<std::pair<long long, long long>, std::pair<long long, long long>> gen
 int main() {
     long long p, q;
 
-    std::cout << "Masukkan dua bilangan prima: ";
+    std::cout << "Enter two prime numbers: ";
     std::cin >> p >> q;
 
     auto [publicKey, privateKey] = generateKeys(p, q);

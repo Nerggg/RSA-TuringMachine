@@ -1,18 +1,19 @@
 #include "turing.hpp"
+#include "rsa.hpp"
 using namespace std;
 using namespace boost::multiprecision;
 
 int main() {
-    unsigned short opt;
+    unsigned short opt1;
     cout << "Enter your option" << endl;
     cout << "[1] Encryption" << endl;
     cout << "[2] Decryption" << endl;
     do {
-        cin >> opt;
-    } while (opt != 1 && opt != 2);
+        cin >> opt1;
+    } while (opt1 != 1 && opt1 != 2);
 
     unordered_map<string, State> map;
-    if (opt == 1) {
+    if (opt1 == 1) {
         State q0("q0", false, {Rule("q0", true, Symbol("0", "0")), Rule("q0", true, Symbol("1", "1")), Rule("q0", true, Symbol("2", "2")), Rule("q0", true, Symbol("3", "3")), Rule("q0", true, Symbol("4", "4")), Rule("q0", true, Symbol("5", "5")), Rule("q0", true, Symbol("6", "6")), Rule("q0", true, Symbol("7", "7")), Rule("q0", true, Symbol("8", "8")), Rule("q0", true, Symbol("9", "9")), Rule("q1", true, Symbol("_", "_"))});
         State q1("q1", false, {Rule("q1", true, Symbol("0", "0")), Rule("q1", true, Symbol("1", "1")), Rule("q1", true, Symbol("2", "2")), Rule("q1", true, Symbol("3", "3")), Rule("q1", true, Symbol("4", "4")), Rule("q1", true, Symbol("5", "5")), Rule("q1", true, Symbol("6", "6")), Rule("q1", true, Symbol("7", "7")), Rule("q1", true, Symbol("8", "8")), Rule("q1", true, Symbol("9", "9")), Rule("q2", true, Symbol("_", "_"))});
         State q2("q2", false, {Rule("q2", true, Symbol("0", "0")), Rule("q2", true, Symbol("1", "1")), Rule("q2", true, Symbol("2", "2")), Rule("q2", true, Symbol("3", "3")), Rule("q2", true, Symbol("4", "4")), Rule("q2", true, Symbol("5", "5")), Rule("q2", true, Symbol("6", "6")), Rule("q2", true, Symbol("7", "7")), Rule("q2", true, Symbol("8", "8")), Rule("q2", true, Symbol("9", "9")), Rule("q3", true, Symbol("_", "_"))});
@@ -47,15 +48,15 @@ int main() {
     getline(cin, tape);
     TuringMachine t(tape, 0, "q0");
 
-    opt = 0;
+    unsigned short opt2;
     cout << "Do you want to see the step by step process or skip to the output?" << endl;
     cout << "[1] Step by step" << endl;
     cout << "[2] Skip to the output" << endl;
     do {
-        cin >> opt;
-    } while (opt != 1 && opt != 2);
+        cin >> opt2;
+    } while (opt2 != 1 && opt2 != 2);
 
-    if (opt == 1) {
+    if (opt2 == 1) {
         while (!map[t.currentState].status) {
             cin.get();
             t.readTapeOneStep(map);
@@ -63,7 +64,13 @@ int main() {
     }
     else {
         t.readTapeWhole(map);
-    }
+    }    
+
+    cout << endl << "Result with RSA without turing machine: " << endl;
+    rsa(tape, opt1);
+    
+    // 5_25613_64541_anjay mabar$
+    // 5_25613_64541_31125|55188|2131|31125|10226|57653|52395|31125|47295|31125|16540|$
     
     // 7_341143_598547_anjay mabar$
     // 7_341143_598547_578290|317048|166430|578290|333607|147833|471351|578290|335944|578290|430133|$

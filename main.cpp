@@ -16,29 +16,29 @@ int main() {
         State q0("q0", false, {Rule("q0", true, Symbol("0", "0")), Rule("q0", true, Symbol("1", "1")), Rule("q0", true, Symbol("2", "2")), Rule("q0", true, Symbol("3", "3")), Rule("q0", true, Symbol("4", "4")), Rule("q0", true, Symbol("5", "5")), Rule("q0", true, Symbol("6", "6")), Rule("q0", true, Symbol("7", "7")), Rule("q0", true, Symbol("8", "8")), Rule("q0", true, Symbol("9", "9")), Rule("q1", true, Symbol("_", "_"))});
         State q1("q1", false, {Rule("q1", true, Symbol("0", "0")), Rule("q1", true, Symbol("1", "1")), Rule("q1", true, Symbol("2", "2")), Rule("q1", true, Symbol("3", "3")), Rule("q1", true, Symbol("4", "4")), Rule("q1", true, Symbol("5", "5")), Rule("q1", true, Symbol("6", "6")), Rule("q1", true, Symbol("7", "7")), Rule("q1", true, Symbol("8", "8")), Rule("q1", true, Symbol("9", "9")), Rule("q2", true, Symbol("_", "_"))});
         State q2("q2", false, {Rule("q2", true, Symbol("0", "0")), Rule("q2", true, Symbol("1", "1")), Rule("q2", true, Symbol("2", "2")), Rule("q2", true, Symbol("3", "3")), Rule("q2", true, Symbol("4", "4")), Rule("q2", true, Symbol("5", "5")), Rule("q2", true, Symbol("6", "6")), Rule("q2", true, Symbol("7", "7")), Rule("q2", true, Symbol("8", "8")), Rule("q2", true, Symbol("9", "9")), Rule("q3", true, Symbol("_", "_"))});
-        State q3("q3", false, {Rule("q3", true, Symbol("allChar", "encrypt")), Rule("q4", true, Symbol("$", "$"))});
-        State q4("q4", true, {});
-        map["q0"] = q0;
-        map["q1"] = q1;
-        map["q2"] = q2;
-        map["q3"] = q3;
-        map["q4"] = q4;
-    }
-    else {
-        State q0("q0", false, {Rule("q0", true, Symbol("0", "0")), Rule("q0", true, Symbol("1", "1")), Rule("q0", true, Symbol("2", "2")), Rule("q0", true, Symbol("3", "3")), Rule("q0", true, Symbol("4", "4")), Rule("q0", true, Symbol("5", "5")), Rule("q0", true, Symbol("6", "6")), Rule("q0", true, Symbol("7", "7")), Rule("q0", true, Symbol("8", "8")), Rule("q0", true, Symbol("9", "9")), Rule("q1", true, Symbol("_", "_"))});
-        State q1("q1", false, {Rule("q1", true, Symbol("0", "0")), Rule("q1", true, Symbol("1", "1")), Rule("q1", true, Symbol("2", "2")), Rule("q1", true, Symbol("3", "3")), Rule("q1", true, Symbol("4", "4")), Rule("q1", true, Symbol("5", "5")), Rule("q1", true, Symbol("6", "6")), Rule("q1", true, Symbol("7", "7")), Rule("q1", true, Symbol("8", "8")), Rule("q1", true, Symbol("9", "9")), Rule("q2", true, Symbol("_", "_"))});
-        State q2("q2", false, {Rule("q2", true, Symbol("0", "0")), Rule("q2", true, Symbol("1", "1")), Rule("q2", true, Symbol("2", "2")), Rule("q2", true, Symbol("3", "3")), Rule("q2", true, Symbol("4", "4")), Rule("q2", true, Symbol("5", "5")), Rule("q2", true, Symbol("6", "6")), Rule("q2", true, Symbol("7", "7")), Rule("q2", true, Symbol("8", "8")), Rule("q2", true, Symbol("9", "9")), Rule("q3", true, Symbol("_", "_"))});
-        State q3("q3", false, {Rule("q4", true, Symbol("allChar", "read")), Rule("q6", true, Symbol("$", "$"))});
-        State q4("q4", false, {Rule("q5", true, Symbol("allChar", "read"))});
-        State q5("q5", false, {Rule("q3", true, Symbol("allChar", "decrypt"))});
-        State q6("q6", true, {});
+        State q3("q3", false, {Rule("q4", false, Symbol("$", "$")), Rule("q5", false, Symbol("_", "_")), Rule("q3", true, Symbol("allChar", "toAscii"))});
+        State q4("q4", false, {Rule("q5", false, Symbol("_", "_")), Rule("q4", false, Symbol("|", "encrypt")), Rule("q4", false, Symbol("allChar", "readEncrypt"))});
+        State q5("q5", true, {});
         map["q0"] = q0;
         map["q1"] = q1;
         map["q2"] = q2;
         map["q3"] = q3;
         map["q4"] = q4;
         map["q5"] = q5;
-        map["q6"] = q6;
+    }
+    else {
+        State q0("q0", false, {Rule("q0", true, Symbol("0", "0")), Rule("q0", true, Symbol("1", "1")), Rule("q0", true, Symbol("2", "2")), Rule("q0", true, Symbol("3", "3")), Rule("q0", true, Symbol("4", "4")), Rule("q0", true, Symbol("5", "5")), Rule("q0", true, Symbol("6", "6")), Rule("q0", true, Symbol("7", "7")), Rule("q0", true, Symbol("8", "8")), Rule("q0", true, Symbol("9", "9")), Rule("q1", true, Symbol("_", "_"))});
+        State q1("q1", false, {Rule("q1", true, Symbol("0", "0")), Rule("q1", true, Symbol("1", "1")), Rule("q1", true, Symbol("2", "2")), Rule("q1", true, Symbol("3", "3")), Rule("q1", true, Symbol("4", "4")), Rule("q1", true, Symbol("5", "5")), Rule("q1", true, Symbol("6", "6")), Rule("q1", true, Symbol("7", "7")), Rule("q1", true, Symbol("8", "8")), Rule("q1", true, Symbol("9", "9")), Rule("q2", true, Symbol("_", "_"))});
+        State q2("q2", false, {Rule("q2", true, Symbol("0", "0")), Rule("q2", true, Symbol("1", "1")), Rule("q2", true, Symbol("2", "2")), Rule("q2", true, Symbol("3", "3")), Rule("q2", true, Symbol("4", "4")), Rule("q2", true, Symbol("5", "5")), Rule("q2", true, Symbol("6", "6")), Rule("q2", true, Symbol("7", "7")), Rule("q2", true, Symbol("8", "8")), Rule("q2", true, Symbol("9", "9")), Rule("q3", true, Symbol("_", "_"))});
+        State q3("q3", false, {Rule("q3", true, Symbol("|", "decrypt")), Rule("q4", false, Symbol("$", "$")), Rule("q3", true, Symbol("allChar", "readDecrypt"))});
+        State q4("q4", false, {Rule("q5", false, Symbol("_", "_")), Rule("q4", false, Symbol("|", "toChar")), Rule("q4", false, Symbol("allChar", "readEncrypt"))});
+        State q5("q5", true, {});
+        map["q0"] = q0;
+        map["q1"] = q1;
+        map["q2"] = q2;
+        map["q3"] = q3;
+        map["q4"] = q4;
+        map["q5"] = q5;
     }
 
     cin.ignore();
@@ -56,7 +56,7 @@ int main() {
     } while (opt != 1 && opt != 2);
 
     if (opt == 1) {
-        while (t.readIdx != t.tape.length()) {
+        while (!map[t.currentState].status) {
             cin.get();
             t.readTapeOneStep(map);
         }
@@ -64,11 +64,7 @@ int main() {
     else {
         t.readTapeWhole(map);
     }
-
-    // TuringMachine t("7_1183_2867_anjay mabar$", 0, "q0");
-    // TuringMachine t("7_103_143_anjay mabar$", 0, "q0");
-    // TuringMachine t("7_103_143_059033050059121098021059032059049$", 0, "q0");
-
-    // TuringMachine t("7_103_143_hello$", 0, "q0");
-    // TuringMachine t("7_103_143_091062004004045$", 0, "q0");
+    
+    // 7_341143_598547_anjay mabar$
+    // 7_341143_598547_578290|317048|166430|578290|333607|147833|471351|578290|335944|578290|430133|$
 }

@@ -5,6 +5,10 @@
 using namespace std;
 using namespace boost::multiprecision;
 
+int absolute(int a) {
+    return a >= 0 ? a : a*-1;
+}
+
 string highlightCharacter(const string& input, int position) {
     const string red = "\033[31m";
     const string reset = "\033[0m";
@@ -29,14 +33,14 @@ cpp_int power(cpp_int base, cpp_int exponent) {
     return result;
 }
 
-int encryptChar(int e, int n, char c) {
+int encryptRSA(int e, int n, int c) {
     cpp_int temp = power(int(c), e);
     return int(temp % n);
 }
 
-char decryptChar(int d, int n, int c) {
+int decryptRSA(int d, int n, int c) {
     cpp_int temp = power(c, d);
-    return char(temp % n);
+    return int(temp % n);
 }
 
 #endif
